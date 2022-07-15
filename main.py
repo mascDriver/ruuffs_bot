@@ -128,9 +128,9 @@ async def help_command(client, message):
     )
 
 
-@app.on_message()
-async def messages(client, message):
-    await message.reply(f"Não entendi o {message.text} ❔❔❔")
+# @app.on_message()
+# async def messages(client, message):
+#     await message.reply(f"Não entendi o {message.text} ❔❔❔")
 
 
 app.run()
