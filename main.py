@@ -25,7 +25,7 @@ async def callback(client, callback_query):
             'realeza': InlineKeyboardButton('Realeza', callback_data='realeza'),
             'cerro_largo': InlineKeyboardButton('Cerro Largo', callback_data='cerro_largo'),
             'laranjeiras_do_sul': InlineKeyboardButton('Laranjeiras do Sul', callback_data='laranjeiras_do_sul'),
-            'texto': 'Escolha o campus 📖'
+            'texto': 'Escolha o campus 🏫'
         },
         'chapeco': {
             'segunda': InlineKeyboardButton('Segunda', callback_data='0'),
@@ -75,7 +75,7 @@ async def callback(client, callback_query):
         await callback_query.edit_message_text('**Aguarde, carregando cardapio 🔄 🔄 🔄**')
         result = httpx.get(
             f"https://api-ru-uffs.herokuapp.com/campus/{callback_query.message.text.split('escolha')[0].strip()}/dia/{callback_query.data}",
-            timeout=15).json()
+            timeout=20).json()
         result = result['cardapios'][0]
         await callback_query.edit_message_text(f"""
         
@@ -97,26 +97,40 @@ async def callbacks(client, message):
     inline_markup = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton('Cardápio', callback_data='campus')
+                InlineKeyboardButton('Cardápio 📃', callback_data='campus')
             ]
         ]
     )
     await message.reply('**Escolha uma opção 🔗 **', reply_markup=inline_markup)
 
 
+@app.on_message(filters.command('projeto'))
+async def projeto(client, message):
+    inline_markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton('URL 🔗', url='https://github.com/mascDriver/ruuffs_bot')
+            ]
+        ]
+    )
+    await message.reply('Projeto no GitHub 💻', reply_markup=inline_markup)
+
+
+
 @app.on_message(filters.command('help') | filters.command('start'))
 async def help_command(client, message):
     await message.reply(
-        'Esse é o menu para pedir ajuda!\n'
-        'Use **/start** para iniciar o bot!\n'
-        'Use **/help** para pedir ajuda!\n'
-        'Use **/cardapio** para ver o cardápio\n'
+        'Esse é o menu para pedir ajuda! 🆘🆘🆘🆘\n'
+        'Use **/start** para iniciar o bot! 🤖\n'
+        'Use **/help** para pedir ajuda! 🆘\n'
+        'Use **/cardapio** para ver o cardápio 📃\n'
+        'Use **/projeto** para ver o projeto no GitHub 💻\n'
     )
 
 
 @app.on_message()
 async def messages(client, message):
-    await message.reply(f"Não entendi o {message.text}")
+    await message.reply(f"Não entendi o {message.text} ❔❔❔")
 
 
 app.run()
