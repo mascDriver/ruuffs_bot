@@ -73,23 +73,27 @@ async def callback(client, callback_query):
         await callback_query.edit_message_text(txt, reply_markup=inline_markup)
     else:
         await callback_query.edit_message_text('**Aguarde, carregando cardapio 🔄 🔄 🔄**')
+        campus = callback_query.message.text.split('escolha')[0].strip()
         result = httpx.get(
-            f"https://api-ru-uffs.herokuapp.com/campus/{callback_query.message.text.split('escolha')[0].strip()}/dia/{callback_query.data}",
+            f"https://api-ru-uffs.herokuapp.com/campus/{callback_query.message.text.split('escolha')[0].strip().lower()}/dia/{callback_query.data}",
             timeout=20).json()
-        result = result['cardapios'][0]
-        await callback_query.edit_message_text(f"""
-        
-        🗓️ {result['dia']}
-        🥗 {result['salada']}
-        🥗 {result['salada1']}
-        🥗 {result['salada2']}
-        🍚 {result['graos']}
-        🍙 {result['graos1']}
-        🍟 {result['acompanhamento']}
-        🥩 {result['mistura']}
-        🥦 {result['mistura_vegana']}
-        🍩 {result['sobremesa']}
-        """)
+        if 'cardapios' not in result:
+            await callback_query.edit_message_text("Erro 🔥 🔥 🔥 🔥 \nInforme o @mascdriver 🧯 🧯 🧯")
+        else:
+            result = result['cardapios'][0]
+            await callback_query.edit_message_text(f"""
+            \tCardápio de {campus} 🏫\n
+            🗓️ {result['dia']}
+            🥗 {result['salada']}
+            🥗 {result['salada1']}
+            🥗 {result['salada2']}
+            🍚 {result['graos']}
+            🍙 {result['graos1']}
+            🍟 {result['acompanhamento']}
+            🥩 {result['mistura']}
+            🥦 {result['mistura_vegana']}
+            🍩 {result['sobremesa']}
+            """)
 
 
 @app.on_message(filters.command('cardapio'))
