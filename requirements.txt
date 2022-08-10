@@ -3,3 +3,4 @@ tgcrypto==1.2.3
 python-dotenv==0.20.0
 httpx==0.23.0
 uvloop==0.16.0
+apscheduler==3.9.1

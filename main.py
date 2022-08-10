@@ -1,6 +1,8 @@
+from datetime import date
 from os import getenv
 
 import httpx
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from dotenv import load_dotenv
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -15,6 +17,22 @@ app = Client(
     api_hash=getenv('TELEGRAM_API_HASH'),
     bot_token=getenv('TELEGRAM_BOT_TOKEN')
 )
+
+
+def format_cardapio(result, cardapio):
+    return f"""
+            \tCardápio de {cardapio} 🏫\n
+            🗓️ {result['dia']}
+            🥗 {result['salada']}
+            🥗 {result['salada1']}
+            🥗 {result['salada2']}
+            🍚 {result['graos']}
+            🍙 {result['graos1']}
+            🍟 {result['acompanhamento']}
+            🥩 {result['mistura']}
+            🥦 {result['mistura_vegana']}
+            🍩 {result['sobremesa']}
+            """
 
 
 @app.on_callback_query()
@@ -81,19 +99,7 @@ async def callback(client, callback_query):
             await callback_query.edit_message_text("Erro 🔥 🔥 🔥 🔥 \nInforme o @mascdriver 🧯 🧯 🧯")
         else:
             result = result['cardapios'][0]
-            await callback_query.edit_message_text(f"""
-            \tCardápio de {campus} 🏫\n
-            🗓️ {result['dia']}
-            🥗 {result['salada']}
-            🥗 {result['salada1']}
-            🥗 {result['salada2']}
-            🍚 {result['graos']}
-            🍙 {result['graos1']}
-            🍟 {result['acompanhamento']}
-            🥩 {result['mistura']}
-            🥦 {result['mistura_vegana']}
-            🍩 {result['sobremesa']}
-            """)
+            await callback_query.edit_message_text(result, campus)
 
 
 @app.on_message(filters.command('cardapio'))
@@ -120,7 +126,6 @@ async def projeto(client, message):
     await message.reply('Projeto no GitHub 💻', reply_markup=inline_markup)
 
 
-
 @app.on_message(filters.command('help') | filters.command('start'))
 async def help_command(client, message):
     await message.reply(
@@ -136,5 +141,14 @@ async def help_command(client, message):
 # async def messages(client, message):
 #     await message.reply(f"Não entendi o {message.text} ❔❔❔")
 
+async def job_cardapio():
+    result = httpx.get(f"https://api-ru-uffs.herokuapp.com/campus/chapecó/dia/{date.today().weekday()}",
+                       timeout=20).json()
+    await app.send_message("me", format_cardapio(result, 'Chapecó'))
 
+
+scheduler = AsyncIOScheduler()
+scheduler.add_job(job_cardapio, "interval", hour=10, day_of_week='mon-fri')
+
+scheduler.start()
 app.run()
