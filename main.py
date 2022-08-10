@@ -19,9 +19,9 @@ app = Client(
 )
 
 
-def format_cardapio(result, cardapio):
+def format_cardapio(result, campus):
     return f"""
-            \tCardápio de {cardapio} 🏫\n
+            \tCardápio de {campus} 🏫\n
             🗓️ {result['dia']}
             🥗 {result['salada']}
             🥗 {result['salada1']}
@@ -99,7 +99,7 @@ async def callback(client, callback_query):
             await callback_query.edit_message_text("Erro 🔥 🔥 🔥 🔥 \nInforme o @mascdriver 🧯 🧯 🧯")
         else:
             result = result['cardapios'][0]
-            await callback_query.edit_message_text(result, campus)
+            await callback_query.edit_message_text(format_cardapio(result, campus))
 
 
 @app.on_message(filters.command('cardapio'))
@@ -144,11 +144,11 @@ async def help_command(client, message):
 async def job_cardapio():
     result = httpx.get(f"https://api-ru-uffs.herokuapp.com/campus/chapecó/dia/{date.today().weekday()}",
                        timeout=20).json()
-    await app.send_message("me", format_cardapio(result, 'Chapecó'))
+    await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'))
 
 
 scheduler = AsyncIOScheduler()
-scheduler.add_job(job_cardapio, "interval", hour=10, day_of_week='mon-fri')
+scheduler.add_job(job_cardapio, "cron", hour=8, day_of_week='mon-fri')
 
 scheduler.start()
 app.run()
