@@ -152,7 +152,7 @@ async def job_cardapio():
 
 
 scheduler = AsyncIOScheduler()
-scheduler.add_job(job_cardapio, "cron", hour=8, minute=15, day_of_week='mon-fri')
+scheduler.add_job(job_cardapio, "cron", hour=8, minute=30, day_of_week='mon-fri')
 
 scheduler.start()
 app.run()
