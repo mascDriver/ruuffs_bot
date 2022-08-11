@@ -142,13 +142,17 @@ async def help_command(client, message):
 #     await message.reply(f"Não entendi o {message.text} ❔❔❔")
 
 async def job_cardapio():
-    result = httpx.get(f"https://api-ru-uffs.herokuapp.com/campus/chapecó/dia/{date.today().weekday()}",
+    result = httpx.get(f"https://api-ru-uffs.herokuapp.com/campus/chapeco/dia/{date.today().weekday()}",
                        timeout=20).json()
-    await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'))
+    if 'cardapios' not in result:
+        await app.send_message("@mascdriver", f'Erro no cardapio automatico em Chapeco dia :{date.today().weekday()}'
+                                              f'Resul: {result}')
+    else:
+        await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'))
 
 
 scheduler = AsyncIOScheduler()
-scheduler.add_job(job_cardapio, "cron", hour=8, day_of_week='mon-fri')
+scheduler.add_job(job_cardapio, "cron", hour=8, minute=15, day_of_week='mon-fri')
 
 scheduler.start()
 app.run()
