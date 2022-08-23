@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="800" src="logo-uffs.png" title="Logo do projeto"><br />
+    <img width="440" src="ruuffs-logo.svg" title="Logo do projeto"><br /><br />
     <img src="https://img.shields.io/maintenance/yes/2022?style=for-the-badge" title="Status do projeto">
 </p>
 
