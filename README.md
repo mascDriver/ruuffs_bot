@@ -15,7 +15,6 @@ bot no telegram: `@ruuffs_bot`, converse com ele ;)
 
 * ✔️ Fácil integração;
 * 🥢 Poucas dependências;
-* 🎨 Utiliza um template lindo para organizar o `README`;
 
 ## 🚀 Começando
 
