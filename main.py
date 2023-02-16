@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from os import getenv
 
 import httpx
@@ -157,8 +157,13 @@ async def job_cardapio():
 async def send_nextbus(client, message):
     horarios = httpx.post('http://beta.eagletrack.com.br/api/coletivos/linhas/listar/horarios',
                           data={'diaSemana': datetime.now().weekday() + 1, 'linha': 23}).json()
-    result = list(filter(lambda x: parse(x['hrhorario']).time() > datetime.now().time(), horarios))
-    await message.reply(f'Próximo 🚌 sai do terminal as 🕛 : {result[0]["hrhorario"]} linha 🛣: {result[0]["lidescricao"]}')
+    result = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=3)).time(), horarios))
+    await message.reply(f''
+                        f'Próximo 🚌 🚌 🚌 🚌\n\n '
+                        f'Sai do terminal às 🕛 : '
+                        f'\n\t{result[0]["hrhorario"]} '
+                        f'\nLinha 🛣 🛣 🛣 🛣: '
+                        f'\n\t {result[0]["lidescricao"]}')
 
 
 scheduler = AsyncIOScheduler()
