@@ -1,8 +1,9 @@
-from datetime import date
+from datetime import date, datetime
 from os import getenv
 
 import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from dateutil.parser import parse
 from dotenv import load_dotenv
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -134,6 +135,7 @@ async def help_command(client, message):
         'Use **/help** para pedir ajuda! 🆘\n'
         'Use **/cardapio** para ver o cardápio 📃\n'
         'Use **/projeto** para ver o projeto no GitHub 💻\n'
+        'Use **/bus** para ver o próximo bus 🚌\n'
     )
 
 
@@ -149,6 +151,14 @@ async def job_cardapio():
                                               f'Resul: {result}')
     else:
         await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'))
+
+
+@app.on_message(filters.command('bus'))
+async def send_nextbus(client, message):
+    horarios = httpx.post('http://beta.eagletrack.com.br/api/coletivos/linhas/listar/horarios',
+                          data={'diaSemana': datetime.now().weekday() + 1, 'linha': 23}).json()
+    result = list(filter(lambda x: parse(x['hrhorario']).time() > datetime.now().time(), horarios))
+    await message.reply(f'Próximo 🚌 sai do terminal as 🕛 : {result[0]["hrhorario"]} linha 🛣: {result[0]["lidescricao"]}')
 
 
 scheduler = AsyncIOScheduler()
