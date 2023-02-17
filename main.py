@@ -1,11 +1,13 @@
+from datetime import date, datetime, timedelta
+from os import getenv
+
 import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from datetime import date, datetime, timedelta
 from dateutil.parser import parse
 from dotenv import load_dotenv
-from os import getenv
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.enums import ChatType
 from uvloop import install
 
 install()
@@ -154,18 +156,15 @@ async def job_cardapio():
 
 @app.on_message(filters.command('bus'))
 async def send_nextbus(client, message):
-    horarios = httpx.post('http://beta.eagletrack.com.br/api/coletivos/linhas/listar/horarios',
-                          data={'diaSemana': datetime.now().weekday() + 1, 'linha': 23}).json()
-    result = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=3)).time(), horarios))
-    await message.reply(f'{message.chat.type}'
-                        f'Próximos 🚌 🚌 🚌 🚌\n\n'
-                        f'Sai do terminal às 🕛 : '
-                        f'\n1- \t\t{result[0]["hrhorario"]} '
-                        f'\n2- \t\t{result[1]["hrhorario"]} '
-                        f'\nLinha 🛣 🛣 🛣 🛣:'
-                        f'\n1- \t\t{result[0]["lidescricao"]}'
-                        f'\n2- \t\t{result[1]["lidescricao"]}'
-                        )
+    if message.chat.type == ChatType.PRIVATE:
+        horarios = httpx.post('http://beta.eagletrack.com.br/api/coletivos/linhas/listar/horarios',
+                              data={'diaSemana': datetime.now().weekday() + 1, 'linha': 23}).json()
+        result = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=3)).time(), horarios))
+        await message.reply(f'Próximos 🚌 🚌 🚌 🚌\n\n'
+                            f'Sai do terminal às 🕛 : '
+                            f'\n1- \t\t{result[0]["hrhorario"]} - {result[0]["lidescricao"]}'
+                            f'\n2- \t\t{result[1]["hrhorario"]} - {result[1]["lidescricao"]}'
+                            )
 
 
 scheduler = AsyncIOScheduler()
