@@ -165,14 +165,13 @@ async def send_nextbus(client, message):
         Próximos 🚌 🚌 🚌 🚌
         
         Sai do terminal às 🕛 : 
-        1-      {nexts_origin[0]["hrhorario"]} - {nexts_origin[0]["lidescricao"] }
-        2-      {nexts_origin[1]["hrhorario"]} - {nexts_origin[1]["lidescricao"] if len(nexts_origin) > 1 else ''}
+1-      {nexts_origin[0]["hrhorario"]} - {nexts_origin[0]["lidescricao"] }
+2-      {nexts_origin[1]["hrhorario"]} - {nexts_origin[1]["lidescricao"] if len(nexts_origin) > 1 else ''}
         ''' if nexts_origin else 'Nenhum onibus saindo do terminal à partir desse horario') + (f'''
-        Próximos 🚌 🚌 🚌 🚌 
-        (que podem estar chegando na UFFS)
+        Próximos 🚌 🚌 🚌 🚌 que podem estar chegando na UFFS
         
         Saiu do terminal às 🕛 : 
-        1-      {nexts_destiny[0]["hrhorario"]} - {nexts_destiny[0]["lidescricao"]}
+1-      {nexts_destiny[0]["hrhorario"]} - {nexts_destiny[0]["lidescricao"]}
         ''' if nexts_destiny and nexts_destiny[0] != nexts_origin[0] else ''))
 
 
