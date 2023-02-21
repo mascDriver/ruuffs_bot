@@ -159,12 +159,20 @@ async def send_nextbus(client, message):
     if message.chat.type == ChatType.PRIVATE:
         horarios = httpx.post('http://beta.eagletrack.com.br/api/coletivos/linhas/listar/horarios',
                               data={'diaSemana': datetime.now().weekday() + 1, 'linha': 23}).json()
-        result = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=3)).time(), horarios))
-        await message.reply(f'Próximos 🚌 🚌 🚌 🚌\n\n'
-                            f'Sai do terminal às 🕛 : '
-                            f'\n1- \t\t{result[0]["hrhorario"]} - {result[0]["lidescricao"]}'
-                            f'\n2- \t\t{result[1]["hrhorario"]} - {result[1]["lidescricao"]}'
-                            )
+        nexts_origin = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=3)).time(), horarios))
+        nexts_destiny = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=2, minutes=20)).time(), horarios))
+        await message.reply((f'''
+        Próximos 🚌 🚌 🚌 🚌
+        
+        Sai do terminal às 🕛 : 
+        1-      {nexts_origin[0]["hrhorario"]} - {nexts_origin[0]["lidescricao"] }
+        2-      {nexts_origin[1]["hrhorario"]} - {nexts_origin[1]["lidescricao"] if len(nexts_origin) > 1 else ''}
+        ''' if nexts_origin else 'Nenhum onibus saindo do terminal à partir desse horario') + (f'''
+        Próximos 🚌 🚌 🚌 🚌 que podem estar chegando na UFFS
+        
+        Saiu do terminal às 🕛 : 
+        1-      {nexts_destiny[0]["hrhorario"]} - {nexts_destiny[0]["lidescricao"]}
+        ''' if nexts_destiny and nexts_destiny[0] != nexts_origin[0] else ''))
 
 
 scheduler = AsyncIOScheduler()
