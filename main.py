@@ -161,20 +161,23 @@ async def send_nextbus(client, message):
                               data={'diaSemana': datetime.now().weekday() + 1, 'linha': 23}).json()
         nexts_origin = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=3)).time(), horarios))
         nexts_destiny = list(filter(lambda x: parse(x['hrhorario']).time() > (datetime.now() - timedelta(hours=3, minutes=30)).time(), horarios))
-        await message.reply((f'''
+        await message.reply(f'''
         Próximos 🚌 🚌 🚌 🚌
         
-        Sai do terminal às 🕛 : 
+            Sai do terminal às 🕛 : 
         
 {nexts_origin[0]["hrhorario"]} - {nexts_origin[0]["lidescricao"] }
 {nexts_origin[1]["hrhorario"]} - {nexts_origin[1]["lidescricao"] if len(nexts_origin) > 1 else ''}
-        ''' if nexts_origin else 'Nenhum onibus saindo do terminal à partir desse horario') + (f'''
-        Próximos 🚌 🚌 🚌 🚌 que podem estar chegando na UFFS
+        ''' if nexts_origin else 'Nenhum onibus saindo do terminal à partir desse horario')
+
+        if nexts_destiny and nexts_destiny[0] != nexts_origin[0]:
+            await message.reply(f'''
+Próximos 🚌 🚌 🚌 🚌 que podem estar chegando na UFFS
         
-        Saiu do terminal às 🕛 : 
+             Saiu do terminal às 🕛 : 
         
 {nexts_destiny[0]["hrhorario"]} - {nexts_destiny[0]["lidescricao"]}
-        ''' if nexts_destiny and nexts_destiny[0] != nexts_origin[0] else ''))
+        ''')
 
 
 scheduler = AsyncIOScheduler()
