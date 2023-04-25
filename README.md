@@ -9,7 +9,7 @@ Bot que retorna cardápio r.u de todos os campus via telegram.
 
 ## ✨ Features
 
-Ao invocar `/cardapio` o bot retorna opções para acessar o cardápio do dia
+Ao invocar `/cardapio` o bot retorna opções para acessar o cardápio do dia 
 <br>
 bot no telegram: `@ruuffs_bot`, converse com ele ;)
 
