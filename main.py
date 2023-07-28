@@ -101,7 +101,7 @@ async def callback(client, callback_query):
             await callback_query.edit_message_text("Erro 🔥 🔥 🔥 🔥 \nInforme o @mascdriver 🧯 🧯 🧯")
         else:
             result = result['cardapios'][0]
-            await callback_query.edit_message_text(format_cardapio(result, campus))
+            await callback_query.edit_message_text(format_cardapio(result, campus), silent(True))
 
 
 @app.on_message(filters.command('cardapio'))
@@ -151,7 +151,7 @@ async def job_cardapio():
         await app.send_message("@mascdriver", f'Erro no cardapio automatico em Chapeco dia :{date.today().weekday()}'
                                               f'Resul: {result}')
     else:
-        await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'))
+        await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'), silent(True))
 
 
 @app.on_message(filters.command('bus'))
