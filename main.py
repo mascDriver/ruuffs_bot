@@ -151,7 +151,7 @@ async def job_cardapio():
         await app.send_message("@mascdriver", f'Erro no cardapio automatico em Chapeco dia :{date.today().weekday()}'
                                               f'Resul: {result}')
     else:
-        await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó', silent=True))
+        await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'), silent=True)
 
 
 @app.on_message(filters.command('bus'))
