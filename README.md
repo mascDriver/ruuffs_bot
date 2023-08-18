@@ -1,6 +1,6 @@
 <p align="center">
     <img width="440" src="ruuffs-logo.svg" title="Logo do projeto"><br /><br />
-    <img src="https://img.shields.io/maintenance/yes/2022?style=for-the-badge" title="Status do projeto">
+    <img src="https://img.shields.io/maintenance/yes/2024?style=for-the-badge" title="Status do projeto">
 </p>
 
 # Bot R.U UFFS
