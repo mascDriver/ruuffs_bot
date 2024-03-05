@@ -128,6 +128,18 @@ async def projeto(client, message):
     await message.reply('Projeto no GitHub 💻', reply_markup=inline_markup)
 
 
+@app.on_message(filters.command('git'))
+async def projeto(client, message):
+    inline_markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton('URL 🔗', url='https://github.com/mascDriver')
+            ]
+        ]
+    )
+    await message.reply('Meus projetos no GitHub 💻', reply_markup=inline_markup)
+
+
 @app.on_message(filters.command('help') | filters.command('start'))
 async def help_command(client, message):
     await message.reply(
@@ -137,6 +149,7 @@ async def help_command(client, message):
         'Use **/cardapio** para ver o cardápio 📃\n'
         'Use **/projeto** para ver o projeto no GitHub 💻\n'
         'Use **/bus** para ver o próximo bus 🚌\n'
+        '**/git** para ver os projetos no GitHub 💻\n'
     )
 
 
