@@ -1,4 +1,4 @@
-pyrogram==2.0.30
+pyrogram==2.0.106
 tgcrypto==1.2.3
 python-dotenv==0.20.0
 httpx==0.23.0
