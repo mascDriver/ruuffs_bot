@@ -30,6 +30,7 @@ def format_cardapio(result, campus):
             🥗 {result['salada2']}
             🍚 {result['graos']}
             🍙 {result['graos1']}
+            🥫 {result['graos2']}
             🍟 {result['acompanhamento']}
             🥩 {result['mistura']}
             🥦 {result['mistura_vegana']}
