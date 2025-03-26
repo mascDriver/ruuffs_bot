@@ -99,7 +99,7 @@ async def callback(client, callback_query):
             f"https://ru-uffs-api.mascdriver.com.br/campus/{callback_query.message.text.split('escolha')[0].strip().lower()}/dia/{callback_query.data}",
             timeout=20).json()
         if 'cardapios' not in result:
-            await callback_query.edit_message_text("Erro 🔥 🔥 🔥 🔥 \nAbra uma issue no repo: https://github.com/mascDriver/ruuffs_bot/issues")
+            await callback_query.edit_message_text("Erro 🔥 🔥 🔥 🔥 \nInforme o @mascdriver 🧯 🧯 🧯")
         else:
             result = result['cardapios']
             await callback_query.edit_message_text(format_cardapio(result, campus))
