@@ -101,7 +101,7 @@ async def callback(client, callback_query):
         if 'cardapios' not in result:
             await callback_query.edit_message_text("Erro 🔥 🔥 🔥 🔥 \nAbra uma issue no repo: https://github.com/mascDriver/ruuffs_bot/issues")
         else:
-            result = result['cardapios']
+            result = result['cardapios'][0]
             await callback_query.edit_message_text(format_cardapio(result, campus))
 
 
@@ -165,7 +165,7 @@ async def job_cardapio():
         await app.send_message("@mascdriver", f'Erro no cardapio automatico em Chapeco dia :{date.today().weekday()}'
                                               f'Resul: {result}')
     else:
-        await app.send_message("@computacaouffs", format_cardapio(result['cardapios'], 'Chapecó'))
+        await app.send_message("@computacaouffs", format_cardapio(result['cardapios'][0], 'Chapecó'))
 
 
 @app.on_message(filters.command('bus'))
